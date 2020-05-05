@@ -1,6 +1,7 @@
-from Utils import Frame, KeyRecord
+from Utils import Frame, KeyRecord, SpeedDetection
 from pynput.keyboard import Listener
 
 
 if __name__ == "__main__":
-    Frame.captureFrames()
+    SpeedDetection.cutTwoDigitsSpeedImg()
+    # Frame.captureFrames()
