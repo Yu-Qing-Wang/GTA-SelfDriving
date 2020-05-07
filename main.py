@@ -3,5 +3,11 @@ from pynput.keyboard import Listener
 
 
 if __name__ == "__main__":
-    SpeedDetection.cutTwoDigitsSpeedImg()
+    # SpeedDetection.cutTwoDigitsSpeedImg()
+
+    samples = SpeedDetection.formTrainingData()
+    model = SpeedDetection.defineSpeedDetectionModel()
+    # TODO: shuffle?
+    model = SpeedDetection.trainSpeedDetectionModel(samples, model)
+
     # Frame.captureFrames()
