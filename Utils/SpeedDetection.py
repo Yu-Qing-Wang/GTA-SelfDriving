@@ -7,6 +7,7 @@ from conf import speedROI
 import cv2
 import os
 
+
 def cutTwoDigitsSpeedImg():
     files = os.listdir("data/speed/")
     for file in files:
@@ -50,10 +51,8 @@ def defineSpeedDetectionModel():
     imgFlattenLength = speedROI["width"]*speedROI["height"]
 
     inputLayer = layers.Input(shape=[imgFlattenLength], name="input")
-    dense_1 = layers.Dense(units=512, input_shape=(imgFlattenLength, ), activation="relu", use_bias=True, name="dense_1")(inputLayer)
-    dense_2 = layers.Dense(units=256, input_shape=(512, ), activation="relu", use_bias=True, name="dense_2")(dense_1)
-    dense_3 = layers.Dense(units=128, input_shape=(256, ), activation="relu", use_bias=True, name="dense_3")(dense_2)
-    output = layers.Dense(units=11, input_shape=(128, ), activation="softmax", use_bias=True, name="output")(dense_3)
+    dense_1 = layers.Dense(units=128, input_shape=(imgFlattenLength, ), activation="relu", use_bias=True, name="dense_1")(inputLayer)
+    output = layers.Dense(units=11, input_shape=(128, ), activation="softmax", use_bias=True, name="output")(dense_1)
 
     model = Model(inputLayer, output)
     opt = optimizers.Adam(lr=0.001)
