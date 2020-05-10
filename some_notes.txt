@@ -1,0 +1,9 @@
+1. cnn vs nn in speed detection
+2. cnn padding during conv and pooling to resolve downsampling
+
+cnn 1 misclassified as 7 -> increase 1 and decrease 7 sample size
+
+3 8 
+6 4
+
+change to only input first number

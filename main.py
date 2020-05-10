@@ -3,10 +3,10 @@ from pynput.keyboard import Listener
 
 
 if __name__ == "__main__":
-    # SpeedDetection.cutTwoDigitsSpeedImg()
-
-    # samples = SpeedDetection.formTrainingData()
+    # # train speed detection model
+    # X, Y = SpeedDetection.formTrainingData()
     # model = SpeedDetection.defineSpeedDetectionModel()
-    # model = SpeedDetection.trainSpeedDetectionModel(samples, model)
-
+    # model = SpeedDetection.trainSpeedDetectionModel(X, Y, model)
+    # model.save("models/speed_detector.h5")
+    
     Frame.captureFrames()

@@ -1,16 +1,22 @@
-from keyboard import is_pressed
+from keyboard import *
 from conf import *
 
 def catchRegisteredKeys():
+    """
+        Catch only one key press/not press action
+    """
     if is_pressed('w'):
-        print('forward')
+        # print('forward')
         return FORWARD
-    if is_pressed('a'):
-        print('left')
+    elif is_pressed('a'):
+        # print('left')
         return LEFT
-    if is_pressed('s'):
-        print('slow')
+    elif is_pressed('s'):
+        # print('slow')
         return SLOW
-    if is_pressed('d'):
-        print('right')
+    elif is_pressed('d'):
+        # print('right')
         return RIGHT
+    else:
+        # print("no action")
+        return NO_ACTION

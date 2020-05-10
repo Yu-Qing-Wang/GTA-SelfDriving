@@ -1,4 +1,5 @@
 import cv2
+from keras.models import load_model
 from PIL import Image
 import conf
 from mss import mss
@@ -17,26 +18,54 @@ def region_of_interest(img, vertices):
     masked_image = cv2.bitwise_and(img, mask)
     return masked_image
 
+def load_models():
+    speedDetectModel = load_model("models/speed_detector.h5")
+    return speedDetectModel
+
+def get_index_with_max_score(scores):
+    maxScore = float("-Inf")
+    index = None
+    for i, score in enumerate(scores):
+        if score > maxScore:
+            maxScore = score
+            index = i
+    return index
 
 def captureFrames():
-    # TODO: resize the lane sct ROI
     mainSct = mss()
+    date = "2020-05-10"
+    # speedDetectModel = load_models()
+    frame = 0
     while True:
         mainSct.get_pixels(conf.mainROI)
         # convert to gray scale by R * 299/1000 + G * 587/1000+ B * 114/1000
         mainImg = np.array(Image.frombytes('RGB', (mainSct.width, mainSct.height), mainSct.image).convert('L'))
 
-        speedImg = region_of_interest(mainImg, np.array([conf.speedROI], np.int32))
-        canniedMainImg = LaneDetection.detect(mainImg)
-        laneImg = region_of_interest(canniedMainImg, np.array([conf.laneROI], np.int32))
+        speedImg = mainImg[conf.speedROIHeightRange[0]:conf.speedROIHeightRange[1], conf.speedROIWidthRange[0]:conf.speedROIWidthRange[1]]
+        frontImg = mainImg[conf.laneROIHeightRange[0]:conf.laneROIHeightRange[1], conf.laneROIWidthRange[0]:conf.laneROIWidthRange[1]]
+
+
+        # canniedLaneImg = LaneDetection.detect(laneImg)
+
+        # reshape to nSamples * nChannel * height * width
+        # levelsScore = speedDetectModel.predict(np.array(speedImg).reshape(1, 1, conf.speedROIHeight, conf.speedROIWidth))
+        # speedLevel = get_index_with_max_score(levelsScore[0])
 
         cv2.imshow('Main ROI', mainImg)
-        cv2.imshow('Lane ROI', laneImg)
+        cv2.imshow('Front ROI', frontImg)
         cv2.imshow('Speed ROI', speedImg)
 
         action = KeyRecord.catchRegisteredKeys()
-        # cv2.imwrite("data/speed/{}.png".format(time()), speedImg)
+        if frame % conf.FRAMES_PER_SAMPLE == 0:
+            # make time same for front img and speed img
+            capTime = time()
+            cv2.imwrite("data/front_img_for_training/{}_{}_{}.png".format(date, capTime, action), frontImg)
+            cv2.imwrite("data/speed_img_for_training/{}_{}_{}.png".format(date, capTime, action), speedImg)
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+
+        frame += 1
+        if frame == 1000:
+            frame = 0
