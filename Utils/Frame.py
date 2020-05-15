@@ -5,7 +5,6 @@ import conf
 from mss import mss
 import numpy as np
 import Utils.KeyRecord as KeyRecord
-from Utils import LaneDetection
 from time import time
 
 def region_of_interest(img, vertices):
@@ -33,7 +32,7 @@ def get_index_with_max_score(scores):
 
 def captureFrames():
     mainSct = mss()
-    date = "2020-05-10"
+    date = "2020-05-15"
     # speedDetectModel = load_models()
     frame = 0
     while True:
@@ -56,11 +55,11 @@ def captureFrames():
         cv2.imshow('Speed ROI', speedImg)
 
         action = KeyRecord.catchRegisteredKeys()
-        if frame % conf.FRAMES_PER_SAMPLE == 0:
+        if action == conf.LEFT or action == conf.RIGHT or action == conf.SLOW or frame % conf.FRAMES_PER_SAMPLE == 0:
             # make time same for front img and speed img
             capTime = time()
-            cv2.imwrite("data/front_img_for_training/{}_{}_{}.png".format(date, capTime, action), frontImg)
-            cv2.imwrite("data/speed_img_for_training/{}_{}_{}.png".format(date, capTime, action), speedImg)
+            cv2.imwrite("data/front_img_for_training/{}/{}_{}.png".format(date, capTime, action), frontImg)
+            cv2.imwrite("data/speed_img_for_training/{}/{}_{}.png".format(date, capTime, action), speedImg)
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
