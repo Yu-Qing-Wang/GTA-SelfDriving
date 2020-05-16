@@ -32,7 +32,7 @@ def get_index_with_max_score(scores):
 
 def captureFrames():
     mainSct = mss()
-    date = "2020-05-15"
+    date = "2020-05-16"
     # speedDetectModel = load_models()
     frame = 0
     while True:
